@@ -57,7 +57,7 @@ build() {
     OPTS='-build-shared'  # Build shared libs
 
     ### Build!
-    #./build charm++ ${charm_version} ${compiler} OPTS=${OPTS}
+    ./build charm++ ${charm_version} ${compiler} OPTS=${OPTS}
 
 
     ### Install
