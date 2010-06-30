@@ -1,0 +1,91 @@
+# Contributor: Nicolas Bigaouette <nbigaouette@gmail.com>
+
+pkgname=charm++-git
+pkgver=20100629
+pkgrel=1
+pkgdesc="Machine independent parallel programming system."
+arch=("x86_64")
+url="http://charm.cs.uiuc.edu/research/charm/"
+license=('custom')
+groups=()
+depends=('inetutils')
+makedepends=('git')
+provides=('charm++')
+conflicts=('charm++')
+replaces=()
+backup=()
+options=()
+install=
+source=()
+noextract=()
+md5sums=() #generate with 'makepkg -g'
+
+_gitroot="git://charm.cs.illinois.edu/charm.git"
+_gitname="charm"
+
+
+build() {
+    cd "$srcdir"
+    msg "Connecting to GIT server...."
+
+    if [ -d $_gitname ] ; then
+        cd $_gitname && git pull origin
+        msg "The local files are updated."
+    else
+        git clone $_gitroot $_gitname
+    fi
+
+    msg "GIT checkout done or server timeout"
+    msg "Starting make..."
+
+    #rm -rf "$srcdir/$_gitname-build"
+    #git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+    cd "$srcdir/$_gitname-build"
+
+
+    ### Version
+    charm_version="net"
+    #charm_version="mpi" # Add dependency over MPI
+    charm_version="${charm_version}-linux"
+    [ "$CARCH" == "x86_64" ] && charm_version="${charm_version}-x86_64"
+
+    ### Compiler
+    #compiler="gcc3"   # GNU Compiler Collection (gcc) v3
+    #compiler="icc"   # Intel's C Compiler (icc)
+
+    ### Options
+    OPTS='-build-shared'  # Build shared libs
+
+    ### Build!
+    #./build charm++ ${charm_version} ${compiler} OPTS=${OPTS}
+
+
+    ### Install
+    mkdir -p ${pkgdir}/usr/{bin,include/charm++,lib}
+    # bin
+    cd ${srcdir}/$_gitname-build/${charm_version}/bin
+    for f in *; do
+        install -m 755 ${f} ${pkgdir}/usr/bin/
+    done
+    # include
+    cd ${srcdir}/$_gitname-build/${charm_version}/include
+    for f in *.h; do
+        cp --dereference ${f} ${pkgdir}/usr/include/charm++/
+    done
+    # static libs
+    cd ${srcdir}/$_gitname-build/${charm_version}/lib
+    for f in *.a; do
+        install -m 644 ${f} ${pkgdir}/usr/lib/
+    done
+    # dynamic libs
+    cd ${srcdir}/$_gitname-build/${charm_version}/lib_so
+    for f in *.so; do
+        install -m 744 ${f} ${pkgdir}/usr/lib/
+    done
+
+    install -D -m 644 \
+        ${srcdir}/$_gitname-build/LICENSE \
+        ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
+
+    cd ${srcdir}
+}
