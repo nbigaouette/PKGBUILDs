@@ -73,7 +73,10 @@ build() {
     for f in *.h; do
         cp --dereference ${f} ${pkgdir}${_installdir}/include/
     done
-    install -m 644 conv-config.sh ${pkgdir}${_installdir}/include/
+    for f in *.sh; do
+        cp --dereference ${f} ${pkgdir}${_installdir}/include/
+        chmod +x ${pkgdir}${_installdir}/include/${f}
+    done
     # static libs
     cd ${srcdir}/$_gitname-build/${charm_version}/lib
     for f in *.a; do
