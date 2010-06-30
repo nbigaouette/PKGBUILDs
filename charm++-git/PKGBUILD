@@ -54,10 +54,10 @@ build() {
     #compiler="icc"   # Intel's C Compiler (icc)
 
     ### Options
-    OPTS='-build-shared'  # Build shared libs
+    #OPTS='OPTS=-build-shared'  # Build shared libs
 
     ### Build!
-    ./build charm++ ${charm_version} ${compiler} OPTS=${OPTS}
+    ./build charm++ ${charm_version} ${compiler} ${OPTS}
 
 
     ### Install
