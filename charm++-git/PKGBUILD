@@ -61,31 +61,33 @@ build() {
 
 
     ### Install
-    mkdir -p ${pkgdir}/usr/{bin,include/charm++,lib}
+    _installdir=/opt/charm++
+    mkdir -p ${pkgdir}${_installdir}/{bin,include/charm++,lib}
     # bin
     cd ${srcdir}/$_gitname-build/${charm_version}/bin
     for f in *; do
-        install -m 755 ${f} ${pkgdir}/usr/bin/
+        install -m 755 ${f} ${pkgdir}${_installdir}/bin/
     done
     # include
     cd ${srcdir}/$_gitname-build/${charm_version}/include
     for f in *.h; do
-        cp --dereference ${f} ${pkgdir}/usr/include/charm++/
+        cp --dereference ${f} ${pkgdir}${_installdir}/include/
     done
+    install -m 644 conv-config.sh ${pkgdir}${_installdir}/include/
     # static libs
     cd ${srcdir}/$_gitname-build/${charm_version}/lib
     for f in *.a; do
-        install -m 644 ${f} ${pkgdir}/usr/lib/
+        install -m 644 ${f} ${pkgdir}${_installdir}/lib/
     done
     # dynamic libs
     cd ${srcdir}/$_gitname-build/${charm_version}/lib_so
     for f in *.so; do
-        install -m 744 ${f} ${pkgdir}/usr/lib/
+        install -m 744 ${f} ${pkgdir}${_installdir}/lib/
     done
 
     install -D -m 644 \
         ${srcdir}/$_gitname-build/LICENSE \
-        ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
+        ${pkgdir}/usr/share/licenses/${pkgname/-git/}/LICENSE
 
     cd ${srcdir}
 }
