@@ -50,7 +50,6 @@ build() {
     sed -e "s|FFT_HOME\([ \t]*\)=.*|FFT_HOME\1= /usr|" -i config.mk
 
     ### 4.
-    #export DUAL_FFTW="DUAL_FFTW"
     sed -e "s|DUAL_FFTW\([ \t]*\)=.*|DUAL_FFTW\1= -DDUAL_FFTW|" -i config.mk
 
     ### 5.
