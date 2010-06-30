@@ -1,0 +1,67 @@
+# Contributor: Nicolas Bigaouette <nbigaouette@gmail.com>
+
+pkgname=openatom-git
+pkgver=20100629
+pkgrel=1
+pkgdesc="Highly scalable and portable parallel application for molecular dynamics simulations at the quantum level."
+arch=("x86_64")
+url="http://charm.cs.uiuc.edu/OpenAtom/"
+license=('custom')
+groups=()
+depends=('charm++' 'fftw')
+makedepends=('git')
+provides=('charm++')
+conflicts=('charm++')
+replaces=()
+backup=()
+options=()
+install=
+source=()
+noextract=()
+md5sums=() #generate with 'makepkg -g'
+
+_gitroot="git://charm.cs.illinois.edu/openatom.git"
+_gitname="openatom"
+
+
+build() {
+    cd "$srcdir"
+    msg "Connecting to GIT server...."
+
+    if [ -d $_gitname ] ; then
+        cd $_gitname && git pull origin
+        msg "The local files are updated."
+    else
+        git clone $_gitroot $_gitname
+    fi
+
+    msg "GIT checkout done or server timeout"
+    msg "Starting make..."
+
+    rm -rf "$srcdir/$_gitname-build"
+    git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+    cd "$srcdir/$_gitname-build"
+
+    ### 2.
+    cp makefiles/config.mk config.mk
+
+    ### 3.
+    sed -e "s|CHARMBASE\([ \t]*\)=.*|CHARMBASE\1= /opt/charm++|" -i config.mk
+    sed -e "s|FFT_HOME\([ \t]*\)=.*|FFT_HOME\1= /usr|" -i config.mk
+
+    ### 4.
+    #export DUAL_FFTW="DUAL_FFTW"
+    sed -e "s|DUAL_FFTW\([ \t]*\)=.*|DUAL_FFTW\1= -DDUAL_FFTW|" -i config.mk
+
+    ### 5.
+    sed -e "s|OPT\([ \t]*\)=.*|OPT\1= ${CFLAGS/-O2/-O3}|" -i config.mk || return 1
+
+    ### 6.
+    make all
+
+    ### 8.
+    cd data
+    # water (32 molecules, 10Ry cutoff) dataset
+    git clone git://charm.cs.illinois.edu/datasets/openatom/water_32M_10Ry.git
+    make test
+}
