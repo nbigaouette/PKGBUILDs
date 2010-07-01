@@ -1,0 +1,55 @@
+# Contributor: Nicolas Bigaouette <nbigaouette@gmail.com>
+
+pkgname=kcm_tablet-git
+pkgver=20100701
+pkgrel=1
+pkgdesc="KDE4 GUI for the Wacom tablets configuration (http://github.com/nbigaouette/kcm_tablet)"
+arch=("x86_64")
+url="http://kde-apps.org/content/show.php?content=114856"
+license=('GPL')
+groups=()
+depends=('xf86-input-wacom' 'kdelibs' 'qt')
+makedepends=('git')
+provides=('kcm_tablet')
+conflicts=('kcm_tablet')
+replaces=()
+backup=()
+options=()
+install=
+source=()
+noextract=()
+md5sums=() #generate with 'makepkg -g'
+
+_gitroot="git://github.com/nbigaouette/kcm_tablet.git"
+_gitname="kcm_tablet"
+_gitbranch="bamboopentouch"
+
+
+build() {
+    cd "$srcdir"
+#     msg "Connecting to GIT server...."
+#
+#     if [ -d $_gitname ] ; then
+        cd $_gitname && git pull origin
+#         msg "The local files are updated."
+#     else
+#         git clone $_gitroot $_gitname
+#         cd $_gitname && git branch --track ${_gitbranch} origin/${_gitbranch}
+#         git pull origin
+#     fi
+#     git checkout ${_gitbranch}
+
+    msg "GIT checkout done or server timeout"
+    msg "Starting make..."
+
+#     rm -rf "$srcdir/$_gitname-build"
+#     git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+#     cd "$srcdir/$_gitname-build"
+#
+#     cmake ../$_gitname -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix` -DCMAKE_BUILD_TYPE=release
+    mkdir -p build
+    cd build
+     cmake ../ -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix` -DCMAKE_BUILD_TYPE=release
+    make
+    make install DESTDIR=${pkgdir}
+}
