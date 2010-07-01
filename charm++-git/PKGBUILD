@@ -1,7 +1,7 @@
 # Contributor: Nicolas Bigaouette <nbigaouette@gmail.com>
 
 pkgname=charm++-git
-pkgver=20100629
+pkgver=20100630
 pkgrel=1
 pkgdesc="Machine independent parallel programming system."
 arch=("x86_64")
@@ -38,8 +38,8 @@ build() {
     msg "GIT checkout done or server timeout"
     msg "Starting make..."
 
-    rm -rf "$srcdir/$_gitname-build"
-    git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+#     rm -rf "$srcdir/$_gitname-build"
+#     git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
     cd "$srcdir/$_gitname-build"
 
 
@@ -50,14 +50,23 @@ build() {
     [ "$CARCH" == "x86_64" ] && charm_version="${charm_version}-x86_64"
 
     ### Compiler
+    #compiler="gcc"   # GNU Compiler Collection (gcc)
+    compiler="gcc4"   # GNU Compiler Collection (gcc) v4
     #compiler="gcc3"   # GNU Compiler Collection (gcc) v3
     #compiler="icc"   # Intel's C Compiler (icc)
+#     fcompiler="gfortran"
 
     ### Options
-    #OPTS='OPTS=-build-shared'  # Build shared libs
+    #OPTS='OPTS=-build-shared'  # Build shared libs+
+
+    export F77="gfortran"
+    export F90="gfortran"
+    export CMK_CF90="gfortran"
+    export CMK_CF77="gfortran"
 
     ### Build!
-    ./build charm++ ${charm_version} ${compiler} ${OPTS}
+    #./build charm++ ${charm_version} ${compiler} ${fcompiler} ${OPTS}
+    ./build charm++ ${charm_version} gcc gfortran
 
 
     ### Install

@@ -1,7 +1,7 @@
 # Contributor: Nicolas Bigaouette <nbigaouette@gmail.com>
 
 pkgname=openatom-git
-pkgver=20100629
+pkgver=20100630
 pkgrel=1
 pkgdesc="Highly scalable and portable parallel application for molecular dynamics simulations at the quantum level."
 arch=("x86_64")
@@ -38,8 +38,8 @@ build() {
     msg "GIT checkout done or server timeout"
     msg "Starting make..."
 
-    rm -rf "$srcdir/$_gitname-build"
-    git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+#     rm -rf "$srcdir/$_gitname-build"
+#     git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
     cd "$srcdir/$_gitname-build"
 
     ### 2.
@@ -54,6 +54,13 @@ build() {
 
     ### 5.
     sed -e "s|OPT\([ \t]*\)=.*|OPT\1= ${CFLAGS/-O2/-O3}|" -i config.mk || return 1
+
+    export f77="gfortran"
+    export f90="gfortran"
+    export F77="gfortran"
+    export F90="gfortran"
+    export CMK_CF90="gfortran"
+    export CMK_CF77="gfortran"
 
     ### 6.
     make all
