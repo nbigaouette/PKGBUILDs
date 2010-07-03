@@ -24,6 +24,9 @@ _gitroot="git://github.com/nbigaouette/kcm_tablet.git"
 _gitname="kcm_tablet"
 _gitbranch="bamboopentouch"
 
+# qdbus org.kde.Wacom /kded unloadModule wacomtablet
+# qdbus org.kde.Wacom /kded loadModule wacomtablet
+# kcmshell4 kcm_wacomtablet
 
 build() {
     cd "$srcdir"
