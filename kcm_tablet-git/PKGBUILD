@@ -45,13 +45,13 @@ build() {
     msg "GIT checkout done or server timeout"
     msg "Starting make..."
 
-    rm -rf "$srcdir/$_gitname-build"
-    git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+    #rm -rf "$srcdir/$_gitname-build"
+    #git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
     cd "$srcdir/$_gitname-build"
 
     mkdir -p build
     cd build
-     cmake ../ -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix` -DCMAKE_BUILD_TYPE=release
+    #cmake ../ -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix` -DCMAKE_BUILD_TYPE=release
     make
     make install DESTDIR=${pkgdir}
 }
