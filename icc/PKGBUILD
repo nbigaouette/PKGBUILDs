@@ -31,7 +31,7 @@ _urlnumber=1959
 
 
 pkgrel=1
-pkgdesc="The Intel C/C++ Compiler (debugger included)"
+pkgdesc="The Intel C/C++ Compiler (debugger included) (Intel C++ Composer XE 2011)"
 url="http://software.intel.com/en-us/intel-compilers/"
 arch=('i686' 'x86_64')
 license=('custom')
