@@ -181,7 +181,7 @@ package() {
 
     msg "Installing license..."
     install -D -m 644 \
-        ${srcdir}/${_archive_arch}/license.txt \
+        ${srcdir}/${_archive_arch}/license \
         ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
 
     msg "Updating ${pkgname}.install to edit ld.so.conf correctly..."
