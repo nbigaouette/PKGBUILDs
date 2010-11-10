@@ -101,6 +101,15 @@ build() {
 
     cd ${srcdir}/${_archive_arch}
 
+    if [[ -f /home/${USER}/intel/intel_sdp_products.db ]]; then
+        echo " " && echo " "
+        warning "A folder '/home/${USER}/intel' exist."
+        warning "The install program will get confused by thinking the package is already installed."
+        warning "Please delete that folder (or move it) before continuing."
+        warning "Press any key to continue..."
+        read -p " "
+    fi
+
     echo " " && echo " "
     msg "         This package needs ~2.8GB of disk space to create."
     msg "Press any key to continue..."
