@@ -127,15 +127,14 @@ build() {
         _licensefile_nb=$(($_licensefile_nb+1))
     done
     if [[ ! -f "${_licensefile[0]}" ]]; then
-        msg "ERROR:"
-        msg "         Due to a requirement in Intel's installation script, the"
-        msg "         license file needs to be placed in /opt/intel/licenses/"
-        msg "         BEFORE calling 'makepkg'."
-        msg "         Please copy it there NOW and re-run 'makepkg':"
-        msg "         $ sudo mkdir -p /opt/intel/licenses/"
-        msg "         $ sudo cp NCOM_*.lic /opt/intel/licenses/"
-        msg "         $ makepkg"
-        msg "Aborting."
+        error "         Due to a requirement in Intel's installation script, the"
+        error "         license file needs to be placed in /opt/intel/licenses/"
+        error "         BEFORE calling 'makepkg'."
+        error "         Please copy it there NOW and re-run 'makepkg':"
+        error "         $ sudo mkdir -p /opt/intel/licenses/"
+        error "         $ sudo cp NCOM_*.lic /opt/intel/licenses/"
+        error "         $ makepkg"
+        error "Aborting."
         return 1
     fi
 
