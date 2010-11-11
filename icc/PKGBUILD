@@ -162,11 +162,25 @@ build() {
 #         #rm -fr /home/${USER}/intel
 #         eval "${cmd}"
 #     fi
+
+    mv ${pkgdir} ${pkgdir}_extracted
 }
 
 package() {
+
+    # Calling "makepkg" deletes the ${pkgdir}, but it is quite long to extract.
+    # Move it to ${pkgdir}_extracted, symlink it to ${pkgdir} and continue.
+    echo "${pkgdir}_extracted ${pkgdir}"
+    rm -fr ${pkgdir}
+    ln -s ${pkgdir}_extracted ${pkgdir}
+
     msg "Removing '${pkgdir}' from all files containing it"
-    grep -irl "${pkgdir}" ${pkgdir}${DESTINATION}/* | xargs sed -i "s|${pkgdir}||g" || return 1
+    if [[ -f ${srcdir}/sed_and_grep_from_PKGBUILD ]]; then
+        msg "Already done. Skipping."
+    else
+        grep -irl "${pkgdir}" ${pkgdir}${DESTINATION}/* | xargs sed -i "s|${pkgdir}||g" || return 1
+        touch ${srcdir}/sed_and_grep_from_PKGBUILD
+    fi
 
     cd ${srcdir}
 
