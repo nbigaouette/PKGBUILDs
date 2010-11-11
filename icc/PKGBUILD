@@ -71,15 +71,6 @@ md5sums=("${_archive_md5}"                  # Main archive
 )
 install=${pkgname}.install
 
-function change_link() {
-    # Remove pkgdir from link
-    if [[ -f $1 ]]; then
-        link=`\ls -l $1 | sed -e "s|.*${pkgdir}\(.*\)|\1|g"`
-        rm -f $1
-        ln -s ${link} $1
-    fi
-}
-
 ######################################################################################
 # Common part with icc and ifort
 # BREAKS AUR!!!
@@ -222,15 +213,23 @@ package() {
 #     chmod 644 ${pkgdir}${DESTINATION}/mkl/tools/plugins/com.intel.mkl.help/*
 #     chmod 644 ${pkgdir}${DESTINATION}/mkl/tools/builder/*
 
-    msg "Remove ${pkgdir} from symbolic link target..."
-    change_link ${pkgdir}${DESTINATION}/compilerpro-12.0.0.084
-    change_link ${pkgdir}${DESTINATION}/idb/gui/${_intel_arch2}/plugins/com.intel.debugger.help_1.0.0
-    change_link ${pkgdir}${DESTINATION}/tbb/lib/ia32
-    #change_link ${pkgdir}${DESTINATION}/tbb/lib/emt64
-    [[ "$CARCH" = "x86_64" ]] && change_link ${pkgdir}${DESTINATION}/tbb/lib/intel64
-    change_link ${pkgdir}${DESTINATION}/tbb/bin/ia32
-    #change_link ${pkgdir}${DESTINATION}/tbb/bin/emt64
-    [[ "$CARCH" = "x86_64" ]] && change_link ${pkgdir}${DESTINATION}/tbb/bin/intel64
+    msg "Finding all symbolic links..."
+    cd ${pkgdir}/
+    links_found=(`find ${pkgdir}/ -type l -exec ls -l {} \; | awk '{print ""$9""}'`)
+    msg "Making sure symbolic links don't point to \$pkgdir..."
+    for link_found in ${links_found[*]}; do
+        #msg "  Verifying ${link_found}..."
+        pkgdir_present=`\ls -l ${link_found} | awk '{print ""$11""}' | grep ${pkgdir}` || true
+        if [[ "x${pkgdir_present}" != "x" ]]; then
+            link_new_target=`\ls -l ${link_found} | awk '{print ""$11""}' | sed "s|${pkgdir}||g"`
+            msg "    Fixing symbolic link: ${link_found}"
+            rm -f ${link_found}
+            ln -s ${link_new_target} ${link_found}
+        #else
+        #    msg "  Fine."
+        fi
+    done
+    msg "Done."
 
     #### Fix "icc W: Potential non-FHS man page ([...]) found."
     # Delete japanese man pages
