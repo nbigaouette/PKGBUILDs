@@ -73,9 +73,11 @@ install=${pkgname}.install
 
 function change_link() {
     # Remove pkgdir from link
-    link=`\ls -l $1 | sed -e "s|.*${pkgdir}\(.*\)|\1|g"`
-    rm -f $1
-    ln -s ${link} $1
+    if [[ -f $1 ]]; then
+        link=`\ls -l $1 | sed -e "s|.*${pkgdir}\(.*\)|\1|g"`
+        rm -f $1
+        ln -s ${link} $1
+    fi
 }
 
 ######################################################################################
