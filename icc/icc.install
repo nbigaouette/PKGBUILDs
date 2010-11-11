@@ -2,6 +2,8 @@ post_install() {
 cat << EOF
 
 
+Documentation can be found in /opt/intel/Compiler/2011.0/084/composerxe-2011.0.084/Documentation/en_US/
+
 Don't forget to logout/login to update your \$PATH!
 
 EOF
