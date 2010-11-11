@@ -5,7 +5,7 @@ cat << EOF
 Don't forget to logout/login to update your \$PATH!
 
 EOF
-echo "/opt/intel/Compiler/11.1/072/lib" >> /etc/ld.so.conf
+echo "/opt/intel/Compiler/2011.0/084/lib" >> /etc/ld.so.conf
 ldconfig
 }
 
