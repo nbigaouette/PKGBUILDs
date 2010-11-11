@@ -170,7 +170,6 @@ package() {
 
     # Calling "makepkg" deletes the ${pkgdir}, but it is quite long to extract.
     # Move it to ${pkgdir}_extracted, symlink it to ${pkgdir} and continue.
-    echo "${pkgdir}_extracted ${pkgdir}"
     rm -fr ${pkgdir}
     ln -s ${pkgdir}_extracted ${pkgdir}
 
