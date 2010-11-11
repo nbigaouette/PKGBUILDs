@@ -97,9 +97,9 @@ SUPPORTFILE=${pkgdir}${DESTINATION}/doc/fsupport
 build() {
     cd ${srcdir}/${_archive_arch}
 
-    if [[ -f /home/${USER}/intel/intel_sdp_products.db ]]; then
+    if [ -f /home/${USER}/intel/intel_sdp_products.db -o -f /opt/intel/intel_sdp_products.db ]; then
         echo " " && echo " "
-        warning "A folder '/home/${USER}/intel' exist."
+        warning "A database with a previous installation has been found in either /home/${USER}/intel/intel_sdp_products.db or /opt/intel/intel_sdp_products.db"
         warning "The install program will get confused by thinking the package is already installed."
         warning "Please delete that folder (or move it) before continuing."
         warning "Press any key to continue..."
