@@ -222,8 +222,8 @@ package() {
 #     chmod 644 ${pkgdir}${DESTINATION}/mkl/tools/plugins/com.intel.mkl.help/*
 #     chmod 644 ${pkgdir}${DESTINATION}/mkl/tools/builder/*
 
-    #### Fix ""
-    # Remove ${pkgdir} from symbolic link target
+    msg "Remove ${pkgdir} from symbolic link target..."
+    change_link ${pkgdir}${DESTINATION}/compilerpro-12.0.0.084
     change_link ${pkgdir}${DESTINATION}/idb/gui/${_intel_arch2}/plugins/com.intel.debugger.help_1.0.0
     change_link ${pkgdir}${DESTINATION}/tbb/lib/ia32
     #change_link ${pkgdir}${DESTINATION}/tbb/lib/emt64
