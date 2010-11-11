@@ -2,6 +2,9 @@
 # Contributor: Nicolas Bigaouette <nbigaouette@gmail.com>
 # CARCH=i686
 
+# To repackage without full installation:
+# makepkg --noextract --repackage --force
+
 pkgname=icc
 _comp=c
 #pkgver=11.0.069
