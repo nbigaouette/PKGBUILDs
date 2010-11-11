@@ -235,13 +235,13 @@ package() {
 
     #### Fix "icc W: Potential non-FHS man page ([...]) found."
     # Delete japanese man pages
-    rm -fr ${pkgdir}${DESTINATION}/man/ja_JP
+#     rm -fr ${pkgdir}${DESTINATION}/man/ja_JP
     # Move (english) man pages to FHS location
-    mkdir -p ${pkgdir}/usr/share/man
-    mv ${pkgdir}${DESTINATION}/man/en_US/man1 ${pkgdir}/usr/share/man/
+#     mkdir -p ${pkgdir}/usr/share/man
+#     mv ${pkgdir}${DESTINATION}/man/en_US/man1 ${pkgdir}/usr/share/man/
 #     mv ${pkgdir}${DESTINATION}/man/en_US/man3 ${pkgdir}/usr/share/man/
-    rm -fr ${pkgdir}${DESTINATION}/man
-    ln -s /usr/share/man/ ${pkgdir}${DESTINATION}/man
+#     rm -fr ${pkgdir}${DESTINATION}/man
+#     ln -s /usr/share/man/ ${pkgdir}${DESTINATION}/man
 
     #### Fix "icc E: Symlink ([...]) points to non-existing ./[...]"
     #cd ${pkgdir}${DESTINATION}/ipp/em64t/sharedlib
