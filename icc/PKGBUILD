@@ -78,27 +78,27 @@ function change_link() {
     ln -s ${link} $1
 }
 
+######################################################################################
+# Common part with icc and ifort
+# BREAKS AUR!!!
+#_intel_arch_file=`basename ${source[0]}`
+#_intel_arch_file=${_intel_arch_file/.tar.gz/}
+#_intel_arch_file=${_intel_arch_file##*_}
+#_compiler=${source[0]#*l_}
+#_compiler=${_compiler%%_*}
+#_comp_ver=`echo $source[0] | sed -e "s|.*/l_${_compiler}_||g" -e "s|_${pkgver}.*||g"`
+
+_major_version=${pkgver%%.*}
+_build_version=${pkgver##*.}
+_minor_version=`echo ${pkgver} | sed -e "s/${_major_version}.//g" -e "s/.${_build_version}//g"`
+_compact_version=${_major_version}${_minor_version}${_build_version}
+
+_INSTALLROOT=/opt/intel/Compiler
+DESTINATION=${_INSTALLROOT}/${_major_version}.${_minor_version}/${_build_version}
+SUPPORTFILE=${pkgdir}${DESTINATION}/doc/fsupport
+######################################################################################
+
 build() {
-    ######################################################################################
-    # Common part with icc and ifort
-    # BREAKS AUR!!!
-    #_intel_arch_file=`basename ${source[0]}`
-    #_intel_arch_file=${_intel_arch_file/.tar.gz/}
-    #_intel_arch_file=${_intel_arch_file##*_}
-    #_compiler=${source[0]#*l_}
-    #_compiler=${_compiler%%_*}
-    #_comp_ver=`echo $source[0] | sed -e "s|.*/l_${_compiler}_||g" -e "s|_${pkgver}.*||g"`
-
-    _major_version=${pkgver%%.*}
-    _build_version=${pkgver##*.}
-    _minor_version=`echo ${pkgver} | sed -e "s/${_major_version}.//g" -e "s/.${_build_version}//g"`
-    _compact_version=${_major_version}${_minor_version}${_build_version}
-
-    _INSTALLROOT=/opt/intel/Compiler
-    DESTINATION=${_INSTALLROOT}/${_major_version}.${_minor_version}/${_build_version}
-    SUPPORTFILE=${pkgdir}${DESTINATION}/doc/fsupport
-    ######################################################################################
-
     cd ${srcdir}/${_archive_arch}
 
     if [[ -f /home/${USER}/intel/intel_sdp_products.db ]]; then
