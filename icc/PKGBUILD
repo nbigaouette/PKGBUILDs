@@ -111,7 +111,7 @@ build() {
     fi
 
     echo " " && echo " "
-    msg "         This package needs ~2.8GB of disk space to create."
+    msg "         This package needs ~7GB of disk space to create."
     msg "Press any key to continue..."
     read -p " "
     echo " " && echo " "
