@@ -53,9 +53,9 @@ build() {
 
     ${_python} setup2.py install --root=$pkgdir --prefix=/usr || return 1
 
-    install -D -m755 ${startdir}/pymol.sh ${pkgdir}/usr/bin/pymol
-    install -D -m644 ${startdir}/pymol.desktop ${pkgdir}/usr/share/applications/pymol.desktop
-    install -D -m644 ${startdir}/pymol.jpg ${pkgdir}/usr/share/pixmaps/pymol.jpg
+    install -D -m755 ${startdir}/pymol.sh ${pkgdir}/usr/bin/pymol || return 1
+    install -D -m644 ${startdir}/pymol.desktop ${pkgdir}/usr/share/applications/pymol.desktop || return 1
+    install -D -m644 ${startdir}/pymol.jpg ${pkgdir}/usr/share/pixmaps/pymol.jpg || return 1
 
     #fix of api.py ?
     sed -e "s/as = show_as/#as = show_as/g" -i ${pkgdir}/usr/lib/python${python_ver}/site-packages/pymol/api.py || return 1
