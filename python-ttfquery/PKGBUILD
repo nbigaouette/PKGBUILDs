@@ -1,0 +1,25 @@
+pkgname=python-ttfquery
+pkgver=1.0.4
+pkgrel=1
+pkgdesc=""
+arch=('i686' 'x86_64')
+url="http://pypi.python.org/pypi?%3Aaction=search&term=ttfquery&submit=search"
+depends=('python2')
+makedepends=('pkg-config')
+license=('custom')
+options=(!libtool)
+source=(http://pypi.python.org/packages/source/T/TTFQuery/TTFQuery-${pkgver}.tar.gz)
+md5sums=('f6493432fd37f635f4434aaa9f658ea8')
+
+build() {
+    cd ${srcdir}/TTFQuery-${pkgver}
+    export PYTHON=/usr/bin/python2
+    python2 setup.py build
+}
+
+package() {
+    cd ${srcdir}/TTFQuery-${pkgver}
+    export PYTHON=/usr/bin/python2
+    python2 setup.py install --prefix=/usr --root="${pkgdir}" --optimize=1
+}
+

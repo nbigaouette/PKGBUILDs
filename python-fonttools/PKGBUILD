@@ -1,0 +1,25 @@
+pkgname=python-fonttools
+pkgver=2.3
+pkgrel=1
+pkgdesc=""
+arch=('i686' 'x86_64')
+url="http://sourceforge.net/projects/fonttools/"
+depends=('python2')
+makedepends=('pkg-config')
+license=('custom')
+options=(!libtool)
+source=(http://downloads.sourceforge.net/project/fonttools/${pkgver}/fonttools-${pkgver}.tar.gz)
+md5sums=('502cdf6662e1d075f1902fbd995eaace')
+
+build() {
+    cd ${srcdir}/fonttools-${pkgver}
+    export PYTHON=/usr/bin/python2
+    python2 setup.py build
+}
+
+package() {
+    cd ${srcdir}/fonttools-${pkgver}
+    export PYTHON=/usr/bin/python2
+    python2 setup.py install --prefix=/usr --root="${pkgdir}" --optimize=1
+}
+
