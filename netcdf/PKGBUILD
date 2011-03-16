@@ -1,0 +1,33 @@
+# $Id: PKGBUILD 94910 2010-10-12 12:58:13Z ronald $
+# Maintainer: Ronald van Haren <ronald.archlinux.org>
+# Contributor: damir <damir@archlinux.org>
+
+pkgname=netcdf
+pkgver=4.1.2_beta2
+pkgrel=0.1
+pkgdesc="network Common Data Form interface for array-oriented data access and corresponding library"
+arch=("i686" "x86_64")
+url="http://www.unidata.ucar.edu/downloads/netcdf/index.jsp"
+depends=('gcc-libs' 'hdf5' 'gcc-fortran')
+options=('force' '!libtool' '!makeflags')
+license=('custom')
+source=(http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-${pkgver/_/-}.tar.gz)
+sha1sums=('412fdf86d8e14d1a1e619c6d8ce0c4d5042b1ced')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver/_/-}
+  ./configure --prefix=/usr --enable-shared --enable-static --enable-netcdf-4 --enable-cxx-4 --enable-cxx
+  make
+  make check
+}
+
+package() {
+  cd ${srcdir}/${pkgname}-${pkgver/_/-}
+
+  install -m755 -d ${pkgdir}/usr/lib
+  install -m755 -d ${pkgdir}/usr/share/man
+  make DESTDIR=${pkgdir} install
+
+  install -Dm644 ${srcdir}/${pkgname}-${pkgver/_/-}/COPYRIGHT \
+	${pkgdir}/usr/share/licenses/${pkgname}/COPYRIGHT
+}
