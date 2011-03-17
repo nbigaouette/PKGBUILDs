@@ -13,16 +13,18 @@ license=('custom')
 depends=('zlib' 'sh')
 makedepends=('time')
 source=(ftp://ftp.hdfgroup.org/HDF5/current/src/${pkgname}-${pkgver/_/-}.tar.bz2)
-options=('!libtool')
+options=('!libtool' '!strip')
 md5sums=('0b44950ed25fe66cdaab0725fa875bfe')
 
 build() {
   cd $srcdir/${pkgname}-${pkgver/_/-}
   export CFLAGS="${CFLAGS/O2/O0}"
   export CXXFLAGS="${CFLAGS}"
-  ./configure --prefix=/usr --enable-static \
+  ./configure --prefix=/usr \
+    --enable-shared \
+    --enable-static \
+    --enable-cxx \
     --enable-hl \
-    --enable-threadsafe \
     --enable-linux-lfs \
     --enable-production \
     --with-pic \
@@ -30,6 +32,7 @@ build() {
     --with-pthread=/usr/lib/ \
     --disable-sharedlib-rpath
   make || return 1
+#    --enable-threadsafe \
 }
 
 package() {
