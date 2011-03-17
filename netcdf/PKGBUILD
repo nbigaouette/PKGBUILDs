@@ -16,7 +16,7 @@ sha1sums=('412fdf86d8e14d1a1e619c6d8ce0c4d5042b1ced')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver/_/-}
-  ./configure --prefix=/usr --enable-shared --enable-static --enable-netcdf-4 --enable-cxx-4 --enable-cxx
+  ./configure --prefix=/usr --enable-shared --enable-static --enable-netcdf-4 --enable-cxx-4 --enable-cxx --disable-dap
   make
   make check
 }
