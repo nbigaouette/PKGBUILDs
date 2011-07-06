@@ -30,7 +30,7 @@ package() {
 
     _install_path=/opt/intel/opencl-sdk
 
-    mkdir -p ${pkgdir}{/etc/{OpenCL/vendors,ld.so.conf.d},${_install_path}/usr/lib64}
+    mkdir -p ${pkgdir}{/etc/{OpenCL/vendors,ld.so.conf.d},${_install_path}/usr/lib64,/usr/include}
 
     # Install files
     install -m755 ${srcdir}/usr/lib64/libOpenCL.so ${pkgdir}/${_install_path}/usr/lib64/
@@ -41,4 +41,7 @@ package() {
 
     # ld path
     echo "${_install_path}/usr/lib64" > ${pkgdir}/etc/ld.so.conf.d/intel-opencl-sdk.conf
+
+    # Missing include file
+    install -m644 ${srcdir}/usr/include/CL/cl_d3d10.h ${pkgdir}/usr/include/
 }
