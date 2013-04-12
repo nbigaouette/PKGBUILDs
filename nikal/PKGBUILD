@@ -10,7 +10,7 @@ url="http://joule.ni.com/nidu/cds/view/p/id/3477/lang/fr"
 license=('custom')
 depends=('linux>=3.8' 'linux<3.9')
 makedepends=('rpmextract')
-source=("http://download.ni.com/support/softlib/kal/${pkgver}/NIKAL${pkgver//./}.iso" "nikal.patch")
+source=("http://download.ni.com/support/softlib/kal/${pkgver}/NIKAL${pkgver//./}.iso" "nikal-linux3.patch")
 sha1sums=('7444ccbd87d5d5de97246d5d19f88b124bc7e659' '35b80473e8221a57d2e12695a5e04657f9db19bb')
 
 build() {
@@ -22,7 +22,7 @@ build() {
   rpmextract.sh ${pkgname}i-${pkgver}-${_spkgver}.noarch.rpm
 
   cd ${srcdir}/rpms/usr/local/natinst/nikal/src/nikal
-  patch -Np0 -i ${srcdir}/nikal.patch
+  patch -Np0 -i ${srcdir}/nikal-linux3.patch
   ./configure
   make
   #make SYSSRC=/usr/lib/modules/"${_kernver}/build" module

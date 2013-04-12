@@ -1,0 +1,79 @@
+--- nikal.c.orig	2013-04-12 10:33:20.170448926 -0400
++++ nikal.c	2013-04-12 10:42:48.296234631 -0400
+@@ -173,6 +173,23 @@
+ 
+ 
+ 
++// http://weltall.heliohost.org/wordpress/2012/06/04/linux-3-5-rc1-and-virtualbox/
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 5, 0)
++#define do_mmap vm_mmap
++#endif
++
++// #ifndef MY_DO_MUNMAP
++// # define MY_DO_MUNMAP(a,b,c) do_munmap(a, b, c)
++// #endif
++
++#ifndef MY_DO_MUNMAP
++# if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 5, 0)
++# define MY_DO_MUNMAP(a,b,c) vm_munmap(b, c)
++#else
++# define MY_DO_MUNMAP(a,b,c) do_munmap(a, b, c)
++#endif
++#endif
++
+ 
+ 
+ typedef struct sysinfo              nLinux_sysinfo;
+@@ -1990,7 +2007,7 @@
+ 
+    if (status >= 0)
+    {
+-      vma->vm_flags |= VM_RESERVED | VM_LOCKED | VM_DONTCOPY | VM_DONTEXPAND;
++      vma->vm_flags |= VM_IO | VM_LOCKED | VM_DONTCOPY | VM_DONTEXPAND;
+    }
+ 
+    return status;
+@@ -2145,7 +2162,7 @@
+ {
+    nNIKAL100_tUPtr addr = vmf->pgoff << PAGE_SHIFT;
+    vmf->page = (nLinux_physicalPage*)nNIKAL100_incrementPageRefcount((void*)addr);
+-   return VM_CAN_NONLINEAR;
++   return VM_IO;
+ }
+ 
+ 
+@@ -2158,7 +2175,7 @@
+ 
+    vmf->page = ((list->flags & nNIKAL220_kPageListContiguous) ? (list->pages[0] + vmf->pgoff) : list->pages[vmf->pgoff]);
+    get_page(vmf->page);
+-   return VM_CAN_NONLINEAR;
++   return VM_IO;
+ }
+ #else
+ 
+@@ -2622,7 +2639,7 @@
+ {
+    int status;
+    nLinux_vmArea *vma = (nLinux_vmArea*)vmaPtr;
+-   vma->vm_flags |= (VM_RESERVED | VM_IO);
++   vma->vm_flags |= VM_IO;
+    
+    status =
+ #ifdef nNIKAL100_kRemapPFNRange
+@@ -2676,7 +2693,7 @@
+ #ifdef nNIKAL100_kFourParameterDoMunmap
+          status = do_munmap(current->mm, address, length, 1);
+ #else
+-         status = do_munmap(current->mm, address, length);
++         status = MY_DO_MUNMAP(current->mm, address, length);
+ #endif
+          kalStatus = nNIKAL100_convertLinuxToKALStatus(status);
+          if (nNIKAL100_statusIsFatal(kalStatus))
+@@ -3815,7 +3832,6 @@
+             }
+          }
+          pciBusInformation.primary = bus->primary;
+-         pciBusInformation.secondary = bus->secondary;
+          (*visitor)(visitorArgument, &pciBusInformation);
+       }
+ 
