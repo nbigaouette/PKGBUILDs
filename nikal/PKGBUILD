@@ -1,0 +1,36 @@
+pkgname=nikal
+pkgver=2.3.1
+_spkgver=f0
+_extramodules=extramodules-3.8-ARCH
+_kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
+pkgrel=1
+pkgdesc="NI-KAL"
+arch=('i686' 'x86_64')
+url="http://joule.ni.com/nidu/cds/view/p/id/3477/lang/fr"
+license=('custom')
+depends=('linux>=3.8' 'linux<3.9')
+makedepends=('rpmextract')
+source=("http://download.ni.com/support/softlib/kal/${pkgver}/NIKAL${pkgver//./}.iso" "nikal.patch")
+sha1sums=('7444ccbd87d5d5de97246d5d19f88b124bc7e659' '35b80473e8221a57d2e12695a5e04657f9db19bb')
+
+build() {
+  cd ${srcdir}
+  iso=`basename ${source}`
+
+  tar -zxvf ${pkgname}-${pkgver}${_spkgver}.tar.gz
+  cd ${srcdir}/rpms
+  rpmextract.sh ${pkgname}i-${pkgver}-${_spkgver}.noarch.rpm
+
+  cd ${srcdir}/rpms/usr/local/natinst/nikal/src/nikal
+  patch -Np0 -i ${srcdir}/nikal.patch
+  ./configure
+  make
+  #make SYSSRC=/usr/lib/modules/"${_kernver}/build" module
+}
+
+package() {
+    install -D -m644 "${srcdir}/rpms/usr/local/natinst/nikal/src/nikal/nikal.ko" \
+         "${pkgdir}/usr/lib/modules/${_extramodules}/nikal.ko"
+    gzip "${pkgdir}/usr/lib/modules/${_extramodules}/nikal.ko"
+    install -D -m644 ${srcdir}/LICENSE.txt "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
