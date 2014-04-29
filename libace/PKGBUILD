@@ -8,7 +8,7 @@ url="http://www.cs.wustl.edu/~schmidt/ACE.html"
 license=('custom')
 depends=('gperf')
 source=(http://download.dre.vanderbilt.edu/previous_versions/ACE-$pkgver.tar.gz)
-md5sums=('a5af2338b8480c93c6b6e493d99e6940') #generate with 'makepkg -g'
+md5sums=('a5af2338b8480c93c6b6e493d99e6940')
 
 
 build() {
