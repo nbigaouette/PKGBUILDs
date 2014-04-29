@@ -1,0 +1,33 @@
+# Maintainer: Nicolas Bigaouette <nbigaouette@gmail.com>
+pkgname=libace
+pkgver=6.2.6
+pkgrel=1
+pkgdesc="The ADAPTIVE Communication Environment (ACE) is a freely available, open-source object-oriented (OO) framework that implements many core patterns for concurrent communication software."
+arch=(x86_64)
+url="http://www.cs.wustl.edu/~schmidt/ACE.html"
+license=('custom')
+depends=('gperf')
+source=(http://download.dre.vanderbilt.edu/previous_versions/ACE-$pkgver.tar.gz)
+md5sums=('a5af2338b8480c93c6b6e493d99e6940') #generate with 'makepkg -g'
+
+
+build() {
+    export ACE_ROOT="$srcdir/ACE_wrappers"
+    export "LD_LIBRARY_PATH=$ACE_ROOT/ace:$ACE_ROOT/lib"
+
+    cd "$srcdir/ACE_wrappers"
+    echo "#include \"ace/config-linux.h\"" > "$ACE_ROOT/ace/config.h"
+    echo "include \$(ACE_ROOT)/include/makeinclude/platform_linux.GNU" > "$ACE_ROOT/include/makeinclude/platform_macros.GNU"
+    #make realclean
+    #make
+}
+
+package() {
+    export ACE_ROOT="$srcdir/ACE_wrappers"
+
+    cd "$srcdir/ACE_wrappers"
+    make INSTALL_PREFIX="$pkgdir/" install
+
+    mkdir -p "$pkgdir/usr/share/licenses/libace"
+    cp COPYING "$pkgdir/usr/share/licenses/libace/LICENSE"
+}
