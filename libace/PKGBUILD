@@ -18,8 +18,8 @@ build() {
     cd "$srcdir/ACE_wrappers"
     echo "#include \"ace/config-linux.h\"" > "$ACE_ROOT/ace/config.h"
     echo "include \$(ACE_ROOT)/include/makeinclude/platform_linux.GNU" > "$ACE_ROOT/include/makeinclude/platform_macros.GNU"
-    #make realclean
-    #make
+    make realclean
+    make
 }
 
 package() {
