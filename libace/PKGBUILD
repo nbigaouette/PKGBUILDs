@@ -26,7 +26,7 @@ package() {
     export ACE_ROOT="$srcdir/ACE_wrappers"
 
     cd "$srcdir/ACE_wrappers"
-    make INSTALL_PREFIX="$pkgdir/" install
+    make INSTALL_PREFIX="$pkgdir/usr/" install
 
     mkdir -p "$pkgdir/usr/share/licenses/libace"
     cp COPYING "$pkgdir/usr/share/licenses/libace/LICENSE"
